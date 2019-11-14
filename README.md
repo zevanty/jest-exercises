@@ -1,3 +1,6 @@
+# IMPORTANT NOTE
+This branch contains the solutions
+
 # Jest Exercises
 This repo is for practicing jest with JavaScript and LWC!
 
