@@ -58,10 +58,55 @@ describe('c-helloWorld', () => {
         // TODO:
         // 1. Verify that there is no name for the default
         // 2. Verify that inputing your name into the text box, changes the name of the h1 c-hello-world__name
+        // Create element
+        const element = createElement('c-hello-world', {
+            is: HelloWorld
+        });
+        document.body.appendChild(element);
+
+        // 1. Verify that there is no name by default
+        const EXPECTED_DEFAULT = 'Your name is: ';
+
+        let h1 = element.shadowRoot.querySelector('.c-hello-world__name');
+        expect(h1.textContent).toBe(EXPECTED_DEFAULT);
+
+        // 2. Verify that changing the input causes the name to appear
+        const name = "TEST NAME";
+        const EXPECTED = `${EXPECTED_DEFAULT}${name}`;
+
+        const input = element.shadowRoot.querySelector('.c-hello-world__name-input');
+        input.value = name;
+        input.dispatchEvent(new CustomEvent('change'));
+
+        // Return a promise to wait for any asynchronous DOM updates. Jest
+        // will automatically wait for the Promise chain to complete before
+        // ending the test and fail the test if the promise rejects.
+        return Promise.resolve().then(() => {
+            // Verify display changed
+            expect(h1.textContent).toBe(EXPECTED);
+        });
+
     });
 
     // --- Exercise 3 --- //
     it("Changing the name imperatively works also!", () => {
         // TODO: Verify that calling changeName from the component will trigger the name to be updated
+        // Create element
+        const element = createElement('c-hello-world', {
+            is: HelloWorld
+        });
+        document.body.appendChild(element);
+
+        const name = "Test Name";
+        const EXPECTED = `Your name is: ${name}`;
+
+        element.changeName("Test Name");
+
+        // This promise is needed because we want the component to rerender, which is async
+        return Promise.resolve().then(() => {
+            const h1 = element.shadowRoot.querySelector('.c-hello-world__name');
+            expect(h1.textContent).toBe(EXPECTED);
+        });
+
     });
 });
